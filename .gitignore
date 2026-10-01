@@ -1,0 +1,19 @@
+# External Git projects (do not track)
+projects/*/pvc
+projects/*/My-Project
+
+# Secret data (do not expose)
+/secrets/*
+!/secrets/*.enc.yaml
+*.plain.yaml
+*.dec.yaml
+
+# env
+.env
+.env.*
+!.env.example
+.env.secret
+.env.secret.*
+!.env.secret.example
+__pycache__/
+*.py[cod]

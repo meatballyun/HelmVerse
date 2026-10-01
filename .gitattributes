@@ -1,0 +1,2 @@
+# HelmVerse runs on Linux; keep text files usable across Windows and Linux.
+* text=auto eol=lf

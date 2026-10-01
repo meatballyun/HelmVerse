@@ -1,0 +1,16 @@
+# Non-secret development overrides. Hosts are inherited from values.yaml.
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 32Mi
+  limits:
+    cpu: 250m
+    memory: 128Mi
+
+ingress:
+  annotations:
+    # null removes the inherited issuer annotation during Helm values merging.
+    cert-manager.io/cluster-issuer: null
+  tls: []

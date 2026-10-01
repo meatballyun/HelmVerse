@@ -1,0 +1,2 @@
+- role: control-plane
+- role: worker

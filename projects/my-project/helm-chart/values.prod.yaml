@@ -1,0 +1,12 @@
+# Non-secret production examples; tune resources for your own application.
+# Hosts, TLS and the letsencrypt-prod issuer are inherited from values.yaml.
+# Use a real DNS hostname and initialize cert-manager before deploying.
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi

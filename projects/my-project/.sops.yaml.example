@@ -1,0 +1,8 @@
+# Documentation only: this filename is not used by hv sops.
+# hv sops creates .sops.yaml from your own age public recipient when needed.
+# For custom rules, replace the placeholder before saving as .sops.yaml.
+# Never put an age private identity in this file.
+creation_rules:
+  - path_regex: secrets/values\.(dev|prod)\.enc\.yaml$
+    encrypted_regex: ^secret$
+    age: "<YOUR_AGE_PUBLIC_RECIPIENT>"

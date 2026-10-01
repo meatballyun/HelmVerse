@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HV_BIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export HV_ROOT="${HV_ROOT:-$(cd "$HV_BIN_DIR/.." && pwd)}"
+
+show_help() {
+  cat <<'EOF'
+HelmVerse - deploy web projects to a local kind cluster
+
+Usage:
+  hv <command> [options]
+  hv help [command]
+
+Core commands:
+  init          Prepare HelmVerse and optionally install missing tools
+  doctor        Diagnose tools, cluster, ports, DNS, and HTTP endpoints
+  project       List, create, inspect, and validate projects
+  cluster       Create, inspect, and remove the kind cluster and add-ons
+  deploy        Run the project deployment script
+  sops          Initialize encryption tools and prepare project secrets
+  status        Show release, workload, ingress, and certificate status
+  logs          Stream logs from a project pod
+  shell         Open a shell in a project pod
+  k9s           Open K9s in the current project namespace
+  rollback      Roll back a Helm release
+  undeploy      Uninstall a Helm release safely
+  cert          Manage cert-manager infrastructure and inspect certificates
+  config        Show or change the default project namespace
+  completion    Generate shell completion
+  version       Print the HelmVerse version
+
+Compatibility commands:
+  nginx, pod, set-namespace, ssl, cleanup
+
+Run 'hv help <command>' or 'hv <command> --help' for details.
+EOF
+}
+
+COMMAND="${1:-help}"
+if [[ $# -gt 0 ]]; then
+  shift
+fi
+
+case "$COMMAND" in
+  help|-h|--help)
+    if [[ $# -gt 0 ]]; then
+      COMMAND_SCRIPT="$HV_BIN_DIR/commands/$1.sh"
+      if [[ -x "$COMMAND_SCRIPT" ]]; then
+        exec "$COMMAND_SCRIPT" --help
+      fi
+      printf 'Unknown command: %s\n' "$1" >&2
+      exit 1
+    fi
+    show_help
+    ;;
+  version|-v|--version)
+    exec "$HV_BIN_DIR/commands/version.sh" "$@"
+    ;;
+  *)
+    COMMAND_SCRIPT="$HV_BIN_DIR/commands/$COMMAND.sh"
+    if [[ ! -x "$COMMAND_SCRIPT" ]]; then
+      printf 'Unknown command: %s\n' "$COMMAND" >&2
+      printf "Run 'hv help' to see available commands.\n" >&2
+      exit 1
+    fi
+    exec "$COMMAND_SCRIPT" "$@"
+    ;;
+esac

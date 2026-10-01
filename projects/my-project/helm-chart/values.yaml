@@ -1,0 +1,54 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: example.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - example.local
+      secretName: example-local-tls
+
+persistence:
+  enabled: false
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+
+configmap:
+  enabled: false
+  data:
+    my-key: "Hello from ConfigMap"
+    another-key: "Another value"
+
+# Supplied by SOPS at deployment time. Never put plaintext secrets here.
+secret: {}
+
+resources: {}
+
+probes:
+  enabled: true
+  path: /
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

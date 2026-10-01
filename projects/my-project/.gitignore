@@ -1,0 +1,7 @@
+/.env.secret
+/.env.secret.*
+!/.env.secret.example
+/secrets/*
+!/secrets/*.enc.yaml
+*.plain.yaml
+*.dec.yaml
